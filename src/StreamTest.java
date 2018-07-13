@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class StreamTest {
     public static void main(String[] args) {
@@ -64,5 +65,16 @@ public class StreamTest {
                         .filter((s) -> s.startsWith("b"))
                         .count();
         System.out.println(startsWithB);    // 3
+
+
+        // Reduce 规约
+        // 这是一个最终操作，允许通过指定的函数来讲stream中的多个元素规约为一个元素，规越后的结果是通过Optional接口表示的：
+        Optional<String> reduced =
+                stringCollection
+                        .stream()
+                        .sorted()
+                        .reduce((s1, s2) -> s1 + "#" + s2);
+        reduced.ifPresent(System.out::println);
+// "aaa1#aaa2#bbb1#bbb2#bbb3#ccc#ddd1#ddd2"
     }
 }
