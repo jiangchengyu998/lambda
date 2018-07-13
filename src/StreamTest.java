@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class StreamTest {
     public static void main(String[] args) {
@@ -76,5 +78,40 @@ public class StreamTest {
                         .reduce((s1, s2) -> s1 + "#" + s2);
         reduced.ifPresent(System.out::println);
 // "aaa1#aaa2#bbb1#bbb2#bbb3#ccc#ddd1#ddd2"
+
+        /**
+         * 并行Streams
+         前面提到过Stream有串行和并行两种，串行Stream上的操作是在一个线程中依次完成，而并行Stream则是在多个线程上同时执行。
+
+         下面的例子展示了是如何通过并行Stream来提升性能：
+
+         首先我们创建一个没有重复元素的大表：
+         */
+        int max = 1000000;
+        List<String> values = new ArrayList<>(max);
+        for (int i = 0; i < max; i++) {
+            UUID uuid = UUID.randomUUID();
+            values.add(uuid.toString());
+        }
+
+        // 计算看看排序耗时多久（不用并行功能）
+//        long t0 = System.nanoTime();
+//        long count = values.stream().sorted().count();
+//        System.out.println(count);
+//
+//        long t1 = System.nanoTime();
+//
+//        long millis = TimeUnit.NANOSECONDS.toMillis(t1 - t0);
+//        System.out.println(String.format("sequential sort took: %d ms", millis));
+
+        // 计算看看排序耗时多久（并行功能）
+        long t0 = System.nanoTime();
+        long count = values.parallelStream().sorted().count();
+        System.out.println(count);
+
+        long t1 = System.nanoTime();
+
+        long millis = TimeUnit.NANOSECONDS.toMillis(t1 - t0);
+        System.out.println(String.format("parallel sort took: %d ms", millis));
     }
 }
