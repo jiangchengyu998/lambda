@@ -146,5 +146,14 @@ public class StreamTest {
         map.remove(3, "val33");
         map.get(3);             // null
         System.out.println(map.get(3));
+        System.out.println(map.getOrDefault(3, "not found"));
+
+        // 对Map的元素做合并也变得很容易了：
+        map.merge(9, "", (value, newValue) -> value.concat(newValue));
+        map.get(9);             // val9
+        System.out.println(map.get(9));
+        map.merge(9, "concat", (value, newValue) -> value.concat(newValue));
+        map.get(9);             // val9concat
+        System.out.println(map.get(9));
     }
 }
