@@ -84,12 +84,12 @@ public class StreamTest {
 
          首先我们创建一个没有重复元素的大表：
          */
-        int max = 1000000;
-        List<String> values = new ArrayList<>(max);
-        for (int i = 0; i < max; i++) {
-            UUID uuid = UUID.randomUUID();
-            values.add(uuid.toString());
-        }
+//        int max = 1000000;
+//        List<String> values = new ArrayList<>(max);
+//        for (int i = 0; i < max; i++) {
+//            UUID uuid = UUID.randomUUID();
+//            values.add(uuid.toString());
+//        }
 
         // 计算看看排序耗时多久（不用并行功能）
 //        long t0 = System.nanoTime();
@@ -102,14 +102,14 @@ public class StreamTest {
 //        System.out.println(String.format("sequential sort took: %d ms", millis));
 
         // 计算看看排序耗时多久（并行功能）
-        long t0 = System.nanoTime();
-        long count = values.parallelStream().sorted().count();
-        System.out.println(count);
-
-        long t1 = System.nanoTime();
-
-        long millis = TimeUnit.NANOSECONDS.toMillis(t1 - t0);
-        System.out.println(String.format("parallel sort took: %d ms", millis));
+//        long t0 = System.nanoTime();
+//        long count = values.parallelStream().sorted().count();
+//        System.out.println(count);
+//
+//        long t1 = System.nanoTime();
+//
+//        long millis = TimeUnit.NANOSECONDS.toMillis(t1 - t0);
+//        System.out.println(String.format("parallel sort took: %d ms", millis));
 
         /**
          * Map
@@ -121,22 +121,30 @@ public class StreamTest {
         for (int i = 0; i < 10; i++) {
             map.putIfAbsent(i, "val" + i);
         }
-        map.forEach((id, val) -> System.out.println(val));
+//        map.forEach((id, val) -> System.out.println(val));
+//
+//        map.computeIfPresent(3, (num, val) -> val + num);
+//        map.get(3);             // val33
+//        System.out.println("map.get(3)"+map.get(3));
+//        map.computeIfPresent(9, (num, val) -> null);
+//        map.containsKey(9);     // false
+//
+//        map.computeIfAbsent(23, num -> "val" + num);
+//        map.containsKey(23);    // true
+//        System.out.println("========");
+//        System.out.println(map.get(23));
+//
+//        map.remove(3);
+//        map.computeIfAbsent(3, num -> "bam");
+//        map.get(3);             // val33
+//        System.out.println("map.get(3)+1 = "+map.get(3));
 
-        map.computeIfPresent(3, (num, val) -> val + num);
+
+        // 接下来展示如何在Map里删除一个键值全都匹配的项：
+        map.remove(3, "val3");
         map.get(3);             // val33
-        System.out.println("map.get(3)"+map.get(3));
-        map.computeIfPresent(9, (num, val) -> null);
-        map.containsKey(9);     // false
-
-        map.computeIfAbsent(23, num -> "val" + num);
-        map.containsKey(23);    // true
-        System.out.println("========");
-        System.out.println(map.get(23));
-
-        map.remove(3);
-        map.computeIfAbsent(3, num -> "bam");
-        map.get(3);             // val33
-        System.out.println("map.get(3)+1 = "+map.get(3));
+        map.remove(3, "val33");
+        map.get(3);             // null
+        System.out.println(map.get(3));
     }
 }
