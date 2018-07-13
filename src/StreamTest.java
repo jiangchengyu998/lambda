@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class StreamTest {
@@ -113,5 +110,33 @@ public class StreamTest {
 
         long millis = TimeUnit.NANOSECONDS.toMillis(t1 - t0);
         System.out.println(String.format("parallel sort took: %d ms", millis));
+
+        /**
+         * Map
+         前面提到过，Map类型不支持stream，不过Map提供了一些新的有用的方法来处理一些日常任务。
+         */
+
+
+        Map<Integer, String> map = new HashMap<>();
+        for (int i = 0; i < 10; i++) {
+            map.putIfAbsent(i, "val" + i);
+        }
+        map.forEach((id, val) -> System.out.println(val));
+
+        map.computeIfPresent(3, (num, val) -> val + num);
+        map.get(3);             // val33
+        System.out.println("map.get(3)"+map.get(3));
+        map.computeIfPresent(9, (num, val) -> null);
+        map.containsKey(9);     // false
+
+        map.computeIfAbsent(23, num -> "val" + num);
+        map.containsKey(23);    // true
+        System.out.println("========");
+        System.out.println(map.get(23));
+
+        map.remove(3);
+        map.computeIfAbsent(3, num -> "bam");
+        map.get(3);             // val33
+        System.out.println("map.get(3)+1 = "+map.get(3));
     }
 }
