@@ -1,6 +1,7 @@
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Locale;
@@ -70,5 +71,28 @@ public class DateAPITest {
                         .withLocale(Locale.GERMAN);
         LocalDate xmas = LocalDate.parse("24.12.2014", germanFormatter1);
         System.out.println(xmas);   // 2014-12-24
+
+        // LocalDateTime 本地日期时间
+        /**
+         * LocalDateTime 同时表示了时间和日期，相当于前两节内容合并到一个对象上了。LocalDateTime和LocalTime还有LocalDate一样，都是不可变的。LocalDateTime提供了一些能访问具体字段的方法。
+         */
+
+        LocalDateTime sylvester = LocalDateTime.of(2014, Month.DECEMBER, 31, 23, 59, 59);
+        DayOfWeek dayOfWeek1 = sylvester.getDayOfWeek();
+        System.out.println(dayOfWeek1);      // WEDNESDAY
+
+        Month month = sylvester.getMonth();
+        System.out.println(month);          // DECEMBER
+
+        long minuteOfDay = sylvester.getLong(ChronoField.MINUTE_OF_DAY);
+        System.out.println(minuteOfDay);    // 1439
+
+        // 只要附加上时区信息，就可以将其转换为一个时间点Instant对象，Instant时间点对象可以很容易的转换为老式的java.util.Date
+        Instant instant1 = sylvester
+                .atZone(ZoneId.systemDefault())
+                .toInstant();
+        Date legacyDate1 = Date.from(instant1);
+        System.out.println(legacyDate1);     // Wed Dec 31 23:59:59 CET 2014
+
     }
 }
